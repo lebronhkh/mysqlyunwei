@@ -1,0 +1,60 @@
+#!/bin/bash
+
+#zabbix_agentd start daemon
+
+#chkconfig: 345 72 05
+
+
+#zabbix_agentd开关脚本 writed by yyr
+
+. /etc/rc.d/init.d/functions
+
+pid_file="/var/run/zabbix/zabbix_agentd.pid"
+zabbix_agentd="/usr/local/zabbix/sbin/zabbix_agentd"
+config="/usr/local/zabbix/etc/zabbix_agentd.conf"
+
+################################定义函数 ###################################
+function start {
+ [ -f pid_file ] && { echo "zabbix_agentd is running";exit 1; }
+ pid_dir=`dirname $pid_file`
+ [ ! -d "$pid_dir" ] && { mkdir -p $pid_dir;chown zabbix:zabbix $pid_dir; }
+ echo -n $'starting zabbix_agentd .....'
+ daemon $zabbix_agentd -c $config
+ echo
+}
+
+function stop {
+ echo -n $'stopping zabbix_agentd .....'
+ killproc -p $pid_file $zabbix_agentd -2
+ echo
+}
+
+function restart {
+ stop
+ sleep 3
+ start
+}
+
+function rh_status {
+ status -p $pid_file zabbix_agentd
+}
+
+function print_error {
+ printf "\033[31;1musage $0 <start|stop|restart|status>\033[0m\n"
+ exit 1
+}
+##############################执行主体######################################
+real_dir=$(dirname `/usr/sbin/lsof -p $$ | gawk '$4 =="255r"{print $NF}'`)
+cd $real_dir
+
+
+
+
+  case $1 in
+  start) start;;
+  stop) stop;;
+  restart) restart;;
+  status) rh_status;;
+  *) print_error;;
+  esac
+
