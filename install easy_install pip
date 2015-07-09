@@ -1,0 +1,25 @@
+python 安装easy_install和pip 
+
+
+
+做个记录
+
+easy_install和pip都是用来下载安装Python一个公共资源库PyPI的相关资源包的
+
+首先安装easy_install
+
+下载地址:https://pypi.python.org/pypi/ez_setup
+
+解压,安装.
+
+python ez_setup.py
+
+ 
+
+安装好easy_install 之后 再安装pip
+
+下载地址:https://pypi.python.org/pypi/pip
+
+解压,安装.
+
+python setup.py install
